@@ -54,7 +54,7 @@ function main()
             energyValues[t]    = E[3]
         end
 
-        for t in 1:M
+        @gif for t in 1:M
             t_sim = t*T/M
 
             p1 = plot(sol(t_sim)[1:N], ylims = (-1,1),
@@ -65,12 +65,15 @@ function main()
             markershape = :hexagon,
             markersize = 10,
             line = nothing)
+
             p2 = plot(energyValues[1:t], label = "Total Energy",
-            ylims = (0,0.05),
+            ylims = (0,0.3),
             xlabel = "Time",
             ylabel = "Energy")
             plot!(kinteticValues[1:t], label = "Kintetic Energy")
             plot!(potentialValues[1:t], label = "Potential Energy")
+
+
 
             display(plot(p1,p2,layout = (2,1)))
         end
