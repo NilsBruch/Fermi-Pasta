@@ -1,5 +1,6 @@
 
 using Plots
+using DifferentialEquations
 theme(:juno)
 N = 10
 Δt = 0.1
@@ -107,18 +108,18 @@ function TimeEvo(Time::Int, Ausl_Initial::Array, Geschw_Initial::Array)
     end
 
     x = Euler(Ausl_Initial,Geschw_Initial)
-    energyValues = zeros(0)
-    kintetic = zeros(0)
-    potential = zeros(0)
+    energyValues = zeros(Time)
+    kintetic = zeros(Time)
+    potential = zeros(Time)
     V0 = Energy(Ausl_Initial,Geschw_Initial)[2]
 
     @gif for t in 1:Time-1
         newAuslenkung = x[1]
         newGeschwindigkeit = x[2]
         x = Euler(newAuslenkung,newGeschwindigkeit)
-        push!(kintetic, Energy(newAuslenkung,newGeschwindigkeit)[1])
-        push!(potential, Energy(newAuslenkung,newGeschwindigkeit)[2])
-        push!(energyValues, Energy(newAuslenkung,newGeschwindigkeit)[3])
+        kintetic[t]     = Energy(newAuslenkung,newGeschwindigkeit)[1]
+        potential[t]    = Energy(newAuslenkung,newGeschwindigkeit)[2]
+        energyValues[t] = Energy(newAuslenkung,newGeschwindigkeit)[3]
 
         p1 = plot(newAuslenkung,
                      ylims=(-1,1),
@@ -126,6 +127,8 @@ function TimeEvo(Time::Int, Ausl_Initial::Array, Geschw_Initial::Array)
                      linewidth = 0,
                      markershape = :hexagon,
                      line = nothing)
+
+
         p2 = plot(energyValues,
         ylims = (0,2*V0),
         xtick = false,
@@ -137,6 +140,8 @@ function TimeEvo(Time::Int, Ausl_Initial::Array, Geschw_Initial::Array)
 
 
     end
+
+
 end
 
 TimeEvo(100,Auslenkungen,Geschwindigkeiten)
