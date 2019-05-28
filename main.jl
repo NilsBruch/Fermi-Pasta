@@ -1,7 +1,7 @@
 using DifferentialEquations
 using Plots
 include("structs.jl")
-include("Energy.jl")
+include("energy.jl")
 theme(:juno)
 
 #Hello Nils
