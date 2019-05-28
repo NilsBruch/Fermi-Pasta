@@ -4,6 +4,7 @@ include("structs.jl")
 include("Energy.jl")
 theme(:juno)
 
+#Hello Nils
 function main()
 
     N = 10
