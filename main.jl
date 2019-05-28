@@ -11,20 +11,23 @@ function main()
     t = 100
     Δt = 0.1
 
-    cfg = ChainConstructor(NumberOfAtoms = N, T = t).getHarmonic;
+    cfg_harm = ChainConstructor(NumberOfAtoms = N, T = t).getHarmonic;
+    cfg_anharm = ChainConstructor(NumberOfAtoms = N, T = t).getAnHarmonic;
 
 
     function OneDChain(dy,y,p,t)
+        α,β = p[1],p[2]
+
         for i in 1:N
             if i == 1
-                dy[i] = 0
-                dy[i + N] = 0
+                dy[i]       = dx₁ = 0
+                dy[i + N]   = dv₁ = 0
             elseif i == N
-                dy[i] = 0
-                dy[i + N] = 0
+                dy[i]       = dxₙ = 0
+                dy[i + N]   = dvₙ = 0
             else
-                dy[i] = y[i + N]
-                dy[i + N] = (y[i+1]+y[i-1]-2*y[i])
+                dy[i]       = dxᵢ = y[i + N]
+                dy[i + N]   = dvᵢ = α*(y[i+1]+y[i-1]-2*y[i]) + β*((y[i+1]-y[i])^2-(y[i]-y[i-1])^2)
             end
         end
     end
@@ -36,12 +39,13 @@ function main()
         M = Int(T/Δt)
         tspan = cfg.time
         u0 = cfg.u0
+        p = [cfg.α,cfg.β]
 
         energyValues = zeros(M)
         kinteticValues = zeros(M)
         potentialValues = zeros(M)
 
-        prob = ODEProblem(OneDChain,u0,tspan)
+        prob = ODEProblem(OneDChain,u0,tspan,p)
         sol = solve(prob)
 
         for t in 1:M
@@ -55,7 +59,7 @@ function main()
             energyValues[t]    = E[3]
         end
 
-        @gif for t in 1:M
+        for t in 1:M
             t_sim = t*T/M
 
             p1 = plot(sol(t_sim)[1:N], ylims = (-1,1),
@@ -67,12 +71,20 @@ function main()
             markersize = 10,
             line = nothing)
 
-            p2 = plot(energyValues[1:t], label = "Total Energy",
+            plotlength = 20
+            if t<plotlength+1
+                tp = 1
+            else
+                tp = t-plotlength
+            end
+            xaxis = range(tp,stop = t,step = 1)
+            p2 = plot(xaxis,energyValues[tp:t], label = "Total Energy",
             ylims = (0,0.3),
             xlabel = "Time",
-            ylabel = "Energy")
-            plot!(kinteticValues[1:t], label = "Kintetic Energy")
-            plot!(potentialValues[1:t], label = "Potential Energy")
+            ylabel = "Energy",
+            legend = :bottom)
+            plot!(xaxis,kinteticValues[tp:t], label = "Kintetic Energy")
+            plot!(xaxis,potentialValues[tp:t], label = "Potential Energy")
 
 
 
@@ -81,7 +93,8 @@ function main()
     end
 
 
-    TimeEvo(cfg, t)
+    TimeEvo(cfg_anharm, t)
+
 end
 
 main()
