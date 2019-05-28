@@ -1,9 +1,10 @@
 using DifferentialEquations
 using Plots
+using Distributed
 include("structs.jl")
 include("energy.jl")
 theme(:juno)
-
+addprocs(2)
 #Hello Nils
 function main()
 
@@ -59,7 +60,7 @@ function main()
             energyValues[t]    = E[3]
         end
 
-        for t in 1:M
+        @gif for t in 1:M
             t_sim = t*T/M
 
             p1 = plot(sol(t_sim)[1:N], ylims = (-1,1),
@@ -92,9 +93,13 @@ function main()
         end
     end
 
-
-    TimeEvo(cfg_anharm, t)
-
+    @sync begin
+        @async TimeEvo(cfg_harm, t)
+        @async TimeEvo(cfg_anharm, t)
+    end
 end
+
+
+
 
 main()
