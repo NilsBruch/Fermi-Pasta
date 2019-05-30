@@ -4,12 +4,13 @@ using Distributed
 include("structs.jl")
 include("energy.jl")
 theme(:juno)
+gui()
 addprocs(2)
 #Hello Nils
 function main()
 
     N = 10
-    t = 100
+    t = 2
     Δt = 0.1
 
     cfg_harm = ChainConstructor(NumberOfAtoms = N, T = t).getHarmonic;
@@ -60,6 +61,8 @@ function main()
             energyValues[t]    = E[3]
         end
 
+        xreso = 1280
+        yreso = 720
         @gif for t in 1:M
             t_sim = t*T/M
 
@@ -69,8 +72,9 @@ function main()
             ylabel = "Displacement",
             linewidth = 0,
             markershape = :hexagon,
-            markersize = 10,
-            line = nothing)
+            markersize = 15,
+            line = nothing,
+            size=(xreso,yreso))
 
             plotlength = 20
             if t<plotlength+1
@@ -83,13 +87,14 @@ function main()
             ylims = (0,0.3),
             xlabel = "Time",
             ylabel = "Energy",
-            legend = :bottom)
+            legend = :bottom,
+            size=(xreso,yreso))
             plot!(xaxis,kinteticValues[tp:t], label = "Kintetic Energy")
             plot!(xaxis,potentialValues[tp:t], label = "Potential Energy")
 
 
 
-            display(plot(p1,p2,layout = (2,1)))
+            plot(p1,p2,layout = (2,1))
         end
     end
 
