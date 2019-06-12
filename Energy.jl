@@ -12,7 +12,7 @@ function Energy(Auslenkungen::Array,Geschwindigkeiten::Array,cfg::config)
     end
 
     function V(i)
-        return α/2*(Auslenkungen[i]-Auslenkungen[i+1])^2+β/4*(Auslenkungen[i]-Auslenkungen[i+1])^4
+        return α/2*(Auslenkungen[i]-Auslenkungen[i+1])^2+β/3*(Auslenkungen[i]-Auslenkungen[i+1])^3
     end
 
     function Potential(Auslenkungen)
