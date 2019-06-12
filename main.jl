@@ -4,14 +4,14 @@ using Distributed
 include("structs.jl")
 include("energy.jl")
 theme(:juno)
-gui()
+
 addprocs(2)
 #Hello Nils
 function main()
 
     N = 10
-    t = 2
-    Δt = 0.1
+    t = 20
+    Δt = 0.01
 
     cfg_harm = ChainConstructor(NumberOfAtoms = N, T = t).getHarmonic;
     cfg_anharm = ChainConstructor(NumberOfAtoms = N, T = t).getAnHarmonic;
@@ -29,7 +29,7 @@ function main()
                 dy[i + N]   = dvₙ = 0
             else
                 dy[i]       = dxᵢ = y[i + N]
-                dy[i + N]   = dvᵢ = α*(y[i+1]+y[i-1]-2*y[i]) + β*((y[i+1]-y[i])^2-(y[i]-y[i-1])^2)
+                dy[i + N]   = dvᵢ = α*(y[i+1]+y[i-1]-2*y[i]) + β*((y[i+1]-y[i])^3-(y[i]-y[i-1])^2)
             end
         end
     end
