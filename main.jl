@@ -10,7 +10,7 @@ addprocs(2)
 function main()
 
     N = 10
-    t = 10
+    t = 100
     Δt = 0.0001
 
     cfg_harm = ChainConstructor(NumberOfAtoms = N, T = t).getHarmonic;
