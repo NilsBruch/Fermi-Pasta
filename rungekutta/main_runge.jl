@@ -11,11 +11,11 @@ function main()
     Δt = 0.0001    #timestep width
     nstep=Int(t/Δt)
 
-    filename="./rungekutta/data/test" #Output filename
+    filename="test" #"./rungekutta/data/test" #Output filename
     #Starting conditions
     u0=zeros(2*N) #u0[1:N]: x0[1:N],   u0[N+1:2N]=v0
     x=range(0, N-1; step=1)
-    u0[1:N]=sin.(π/(N-1)*x)
+    u0[1:N]=sin.(4*π/(N-1)*x)
 
 
     #Configuration
@@ -33,10 +33,12 @@ function main()
     close(io_par)
 
     for i in 1:nstep
-        t_sim = (i-1)*Δt
-        T, Pot, E = Energy(cfg) #kinetic, potential and total energy
-        writedlm(io_y, cfg.y') #Write out y
-        writedlm(io_E, [t_sim, E, T, Pot]')
+        if rem(i-1,2000) == 0
+            t_sim = (i-1)*Δt
+            T, Pot, E = Energy(cfg) #kinetic, potential and total energy
+            writedlm(io_y, cfg.y') #Write out y
+            writedlm(io_E, [t_sim, E, T, Pot]')
+        end
         timestep(Δt, cfg) #Calculate cfg.y(t+Δt)
     end
     close(io_y)

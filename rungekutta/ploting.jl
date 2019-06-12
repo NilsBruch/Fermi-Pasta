@@ -6,7 +6,7 @@ theme(:juno)
 xreso = 1280
 yreso = 720
 
-filename="./rungekutta/data/test"
+filename="test" #"./rungekutta/data/test"
 
 sol=readdlm(filename*"_y", '\t', Float64, '\n'; skipstart=1)
 energydata = readdlm(filename*"_E", '\t', Float64, '\n'; skipstart=1)
@@ -18,7 +18,7 @@ Pot= energydata[:,4]
 N, α, β, t, Δt=readdlm(filename*"_p", '\t', Float64, '\n'; skipstart=1)
 N=Int(N)
 
-@gif for t in 1:200000:length(zeit)
+@gif for t in 1:length(zeit)
     p1 = plot(sol[t, 1:N], ylims = (-1,1),
     label = "Atoms",
     xlabel = "x",
