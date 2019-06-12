@@ -10,8 +10,8 @@ addprocs(2)
 function main()
 
     N = 10
-    t = 20
-    Δt = 0.01
+    t = 10
+    Δt = 0.0001
 
     cfg_harm = ChainConstructor(NumberOfAtoms = N, T = t).getHarmonic;
     cfg_anharm = ChainConstructor(NumberOfAtoms = N, T = t).getAnHarmonic;
@@ -29,7 +29,7 @@ function main()
                 dy[i + N]   = dvₙ = 0
             else
                 dy[i]       = dxᵢ = y[i + N]
-                dy[i + N]   = dvᵢ = α*(y[i+1]+y[i-1]-2*y[i]) + β*((y[i+1]-y[i])^3-(y[i]-y[i-1])^2)
+                dy[i + N]   = dvᵢ = α*(y[i+1]+y[i-1]-2*y[i]) + β*((y[i+1]-y[i])^2-(y[i]-y[i-1])^2)
             end
         end
     end
@@ -63,7 +63,8 @@ function main()
 
         xreso = 1280
         yreso = 720
-        @gif for t in 1:M
+        @gif for t in 1:2000:M
+
             t_sim = t*T/M
 
             p1 = plot(sol(t_sim)[1:N], ylims = (-1,1),
