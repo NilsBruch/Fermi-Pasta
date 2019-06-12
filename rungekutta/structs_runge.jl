@@ -35,3 +35,34 @@ function timestep(h, cfg::config)
     #Reasign value
     cfg.y+=h/6*(k1+2*k2+2*k3+k4)
 end
+
+function Energy(cfg::config)
+    N=cfg.NumberOfAtoms
+
+    function ScalarProduct(v,w)
+        return sum((v.*w))
+    end
+
+    function KineticEnergy(Geschwindigkeiten::Array)
+        return 1/2*ScalarProduct(Geschwindigkeiten,Geschwindigkeiten)
+    end
+
+
+
+    function Potential(Auslenkungen)
+        function V(i)
+            return cfg.α/2*(Auslenkungen[i]-Auslenkungen[i+1])^2+cfg.β/4*(Auslenkungen[i]-Auslenkungen[i+1])^4
+        end
+
+        s = 0
+        for i in 1:N-1
+            s = s + V(i)
+        end
+        return s
+    end
+
+    T = KineticEnergy(cfg.y[N+1:2*N])
+    Pot = Potential(cfg.y[1:N])
+    E = T+Pot
+    return [T,Pot,E]
+end
