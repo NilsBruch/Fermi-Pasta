@@ -3,19 +3,19 @@ using DelimitedFiles
 
 function main()
     #Initialize parameters
-    N = 20      #Number of atoms
+    N = 100      #Number of atoms
     α = 1.0     #harmonic coupling
-    β = 0       #anharmonic coupling
+    β = 0.5       #anharmonic coupling
 
-    t = 100      #time to solve the equation for
+    t = 10      #time to solve the equation for
     Δt = 0.0001    #timestep width
     nstep=Int(t/Δt)
 
-    filename="./rungekutta/data/test" #Output filename
+    filename="rungekutta/data/malsehen" #Output filename
     #Starting conditions
     u0=zeros(2*N) #u0[1:N]: x0[1:N],   u0[N+1:2N]=v0
     x=range(0, N-1; step=1)
-    u0[1:N]=sin.(π/(N-1)*x)
+    u0[1:N]=sin.(16*π/(N-1)*x)
 
 
     #Configuration
