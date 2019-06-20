@@ -18,9 +18,9 @@ Pot= energydata[:,4]
 N, α, β, t, Δt=readdlm(filename*"_p", '\t', Float64, '\n'; skipstart=1)
 N=Int(N)
 
-Δt_per_f=1000
+Δt_per_f=500
 fps=30
-50/Δt/Δt_per_f
+t/Δt/Δt_per_f
 
 anim = @animate for t in 1:Δt_per_f:length(zeit)
     p1 = plot(sol[t, 1:N], ylims = (-1,1),
@@ -35,11 +35,6 @@ anim = @animate for t in 1:Δt_per_f:length(zeit)
 
     plotlength = Δt_per_f*fps*Δt
 
-    #if t<plotlength+1
-    #    tp = 1
-    #else
-    #    tp = t-plotlength
-    #end
 
     p2 = plot(zeit[1:t],E_full[1:t], label = "Total Energy",
     ylims = (0,E_full[1]+0.2),

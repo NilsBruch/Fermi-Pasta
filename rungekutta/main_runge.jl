@@ -33,10 +33,12 @@ function main()
     close(io_par)
 
     for i in 1:nstep
-        t_sim = (i-1)*Δt
-        T, Pot, E = Energy(cfg) #kinetic, potential and total energy
-        writedlm(io_y, cfg.y') #Write out y
-        writedlm(io_E, [t_sim, E, T, Pot]')
+        if rem(i-1,2000) == 0
+            t_sim = (i-1)*Δt
+            T, Pot, E = Energy(cfg) #kinetic, potential and total energy
+            writedlm(io_y, cfg.y') #Write out y
+            writedlm(io_E, [t_sim, E, T, Pot]')
+        end
         timestep(Δt, cfg) #Calculate cfg.y(t+Δt)
     end
     close(io_y)
