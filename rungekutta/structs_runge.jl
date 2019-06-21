@@ -47,8 +47,6 @@ function Energy(cfg::config)
         return 1/2*ScalarProduct(Geschwindigkeiten,Geschwindigkeiten)
     end
 
-
-
     function Potential(Auslenkungen)
         function V(i)
             return cfg.α/2*(Auslenkungen[i]-Auslenkungen[i+1])^2+cfg.β/4*(Auslenkungen[i]-Auslenkungen[i+1])^4

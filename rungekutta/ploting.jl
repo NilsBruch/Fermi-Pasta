@@ -6,7 +6,7 @@ theme(:juno)
 xreso = 1280
 yreso = 1000
 
-filename="rungekutta/data/spectrum_harmonic"
+filename="rungekutta/data/spectrum"
 
 sol=readdlm(filename*"_y", '\t', Float64, '\n'; skipstart=1)
 energydata = readdlm(filename*"_E", '\t', Float64, '\n'; skipstart=1)
@@ -25,7 +25,7 @@ N, α, β, t, Δt=readdlm(filename*"_p", '\t', Float64, '\n'; skipstart=1)
 N=Int(N)
 
 anim = @animate for t in 1:length(zeit)
-    #Plot 
+    #Plot
     p1 = plot(sol[t, :], ylims = (-1,1),
     label = "Atoms",
     xlabel = "x",
@@ -36,14 +36,12 @@ anim = @animate for t in 1:length(zeit)
     line = nothing,
     size=(xreso,yreso))
 
-    p2 = plot(spec[t, :],
+    p2 = bar(spec[t, :],
     xlabel="Wave number k",
     ylabel="Occupation",
     ylim=(0, 20),
-    line=nothing,
     legend=nothing,
-    marker=:circle,
-    markersize=2)
+    bar_width=0.05)
 
     fps=30
     Δt_per_f=zeit[2]-zeit[1]
@@ -63,7 +61,7 @@ anim = @animate for t in 1:length(zeit)
     println(t)
 end
 
-gif(anim, "rungekutta/figures/thermalization_harmonic.gif", fps = 30)
+gif(anim, "rungekutta/figures/thermalization.gif", fps = 30)
 
 
 plot(zeit, E_full, label = "Total Energy", ylims = (0,1.5),xlabel = "Time",ylabel = "Energy", legend = :bottom, size=(xreso,yreso))
