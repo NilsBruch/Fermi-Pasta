@@ -6,7 +6,7 @@ theme(:juno)
 xreso = 1280
 yreso = 1000
 
-filename="rungekutta/data/spectrum"
+filename="rungekutta/data/test"
 
 sol=readdlm(filename*"_y", '\t', Float64, '\n'; skipstart=1)
 energydata = readdlm(filename*"_E", '\t', Float64, '\n'; skipstart=1)
@@ -15,11 +15,6 @@ E_full= energydata[:,2]
 T= energydata[:,3]
 Pot= energydata[:,4]
 spec = readdlm(filename*"_spec", '\t', Float64, '\n'; skipstart=1)
-
-#for t in 1:length(zeit)
-#    for k in 1:length(spec[1,:])
-#        if
-
 
 N, α, β, t, Δt=readdlm(filename*"_p", '\t', Float64, '\n'; skipstart=1)
 N=Int(N)
@@ -61,7 +56,7 @@ anim = @animate for t in 1:length(zeit)
     println(t)
 end
 
-gif(anim, "rungekutta/figures/thermalization.gif", fps = 30)
+gif(anim, "rungekutta/figures/test.gif", fps = 30)
 
 
 plot(zeit, E_full, label = "Total Energy", ylims = (0,1.5),xlabel = "Time",ylabel = "Energy", legend = :bottom, size=(xreso,yreso))

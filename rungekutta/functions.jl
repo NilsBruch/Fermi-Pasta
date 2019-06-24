@@ -1,13 +1,15 @@
+
+using FFTW
+
 mutable struct config #type holding configuration and parameters
     NumberOfAtoms::Int64
-    α ::Float64
-    β ::Float64
-    y ::Array #y[1:N]=x, y[N+1:N]=v
+    α ::Float64             #Harmonic coupling
+    β ::Float64             #Quartic coupling
+    y ::Array               #y[1:N]=displacements, y[N+1:2N]=velocities
 end
 
-#Write out right hand side of y'=f(y), dy will contain the derivative
+#Right hand side of y'=f(y), dy will contain y'
 function f(dy, y, N, α, β)
-
     dy[1]=dy[N]=dy[N+1]=dy[2*N]=0 #Fixed boundary conditions (at 0)
 
     for i in 2:N-1
@@ -31,7 +33,6 @@ function timestep(h, cfg::config)
 
     f(dy, cfg.y+h*k3, cfg.NumberOfAtoms, cfg.α, cfg.β)
     k4=dy
-
     #Reasign value
     cfg.y+=h/6*(k1+2*k2+2*k3+k4)
 end
@@ -51,7 +52,6 @@ function Energy(cfg::config)
         function V(i)
             return cfg.α/2*(Auslenkungen[i]-Auslenkungen[i+1])^2+cfg.β/4*(Auslenkungen[i]-Auslenkungen[i+1])^4
         end
-
         s = 0
         for i in 1:N-1
             s = s + V(i)
@@ -63,4 +63,11 @@ function Energy(cfg::config)
     Pot = Potential(cfg.y[1:N])
     E = T+Pot
     return [T,Pot,E]
+end
+
+#Discrete fouriertransform
+function spectrum(cfg::config)
+    N=cfg.NumberOfAtoms
+    spec = abs.(fft(cfg.y[1:N-1]))
+    return spec[1:Int(N/2)+1]
 end
